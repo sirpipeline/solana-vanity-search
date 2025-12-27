@@ -183,6 +183,12 @@ def search_pubkey(
             except:
                 ip_address = "N/A"
 
+            # Get vast.ai metadata from environment variables
+            import os
+            vast_instance_id = os.environ.get('VAST_INSTANCE_ID', 'N/A')
+            vast_host_id = os.environ.get('VAST_HOST_ID', 'N/A')
+            vast_machine_id = os.environ.get('VAST_MACHINE_ID', 'N/A')
+
             def monitor_eta():
                 while result_count < count:
                     time.sleep(10)
@@ -212,7 +218,10 @@ def search_pubkey(
                                         "gpu_count": gpu_counts,
                                         "gpu_names": gpu_names,
                                         "hostname": server_id,
-                                        "ip_address": ip_address
+                                        "ip_address": ip_address,
+                                        "vast_instance_id": vast_instance_id,
+                                        "vast_host_id": vast_host_id,
+                                        "vast_machine_id": vast_machine_id
                                     },
                                     timeout=5
                                 )
