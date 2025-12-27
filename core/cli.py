@@ -166,6 +166,23 @@ def search_pubkey(
             # Start ETA monitoring thread
             import threading
             import requests
+            import socket
+
+            # Gather GPU information
+            gpu_names = []
+            if chosen_devices is None:
+                devices = get_all_gpu_devices()
+            else:
+                devices = get_selected_gpu_devices(*chosen_devices)
+            gpu_names = [device.name for device in devices]
+
+            # Get IP address
+            try:
+                hostname = socket.gethostname()
+                ip_address = socket.gethostbyname(hostname)
+            except:
+                ip_address = "N/A"
+
             def monitor_eta():
                 while result_count < count:
                     time.sleep(10)
@@ -192,7 +209,10 @@ def search_pubkey(
                                     json={
                                         "server_id": server_id,
                                         "speed": total_speed,
-                                        "gpu_count": gpu_counts
+                                        "gpu_count": gpu_counts,
+                                        "gpu_names": gpu_names,
+                                        "hostname": server_id,
+                                        "ip_address": ip_address
                                     },
                                     timeout=5
                                 )
